@@ -10,7 +10,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
     methods
         function self = UR3Model(workspace,location,draw)
             self.workspace = workspace;
-            self.GetRobot();
+            self.getRobot();
             self.currentJoints = zeros(1,6);
             self.model.base = location;
             
@@ -47,7 +47,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             end    
         end
         
-        function GetRobot(self) % Setup Robot Parameters
+        function getRobot(self) % Setup Robot Parameters
             pause(0.001);
             L1 = Link('d',0.1519,'a',0,'alpha',pi/2,'qlim',deg2rad([-360 360]));
             L2 = Link('d',0,'a',-0.24365,'alpha',0,'qlim',deg2rad([-360 360]));

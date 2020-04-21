@@ -51,17 +51,20 @@ switch init
         z = 0;
 end
 
-UR3_1 = SerialLink(linkList,'name','UR3_1','base',transl(x,y,z));
-UR3_1.teach();
+% UR3_1 = SerialLink(linkList,'name','UR3_1','base',transl(x,y,z));
+UR3_1 = UR3Model(workspace, transl(x,y,z), 1);
+
+UR3_1.model.teach()
+% UR3_1.model.teach();
 
 UR3_1q = zeros(size(linkList));        
 UR3_1q = [0,90,0,90,0,0];
-endf = UR3_1.fkine(deg2rad(UR3_1q));
+endf = UR3_1.model.fkine(deg2rad(UR3_1q));
 
-UR3_1.plot(deg2rad(UR3_1q));
+UR3_1.model.plot3d(deg2rad(UR3_1q));
 hold on
 
-% a = UR3_1.fkine(UR3_1q)
+% a = UR3_1.model.fkine(UR3_1q)
 % 0.540 + 0.152 - a(3,4)
 % 0.540 + 0.152
 
@@ -88,21 +91,21 @@ hold on
 % UR3_2q = [0,90,0,90,0,0];
 % endf = UR3_2.fkine(deg2rad(UR3_2q));
 % 
-% UR3_2.plot(deg2rad(UR3_2q));
+% UR3_2.plot3d(deg2rad(UR3_2q));
 % hold on
 
 %% finding max reach
 
 % side view
 UR3_1q = [0,90,0,90,0,0];
-UR3_1.plot(deg2rad(UR3_1q));
+UR3_1.model.plot3d(deg2rad(UR3_1q));
 
 % prompt = 'press enter to continue';
 % input(prompt);
 
 % top view
 UR3_1q = [0,0,0,90,0,0];
-UR3_1.plot(deg2rad(UR3_1q));
+UR3_1.model.plot3d(deg2rad(UR3_1q));
 hold on
 
 % prompt = 'press enter to continue';
@@ -111,12 +114,12 @@ hold on
 %% area
 % REDUNDANT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % UR3_1q = [0,180,0,90,90,0];
-% endf = UR3_1.fkine(deg2rad(UR3_1q));
+% endf = UR3_1.model.fkine(deg2rad(UR3_1q));
 % 
 % maxlen_right = endf(1:3,4)';
 % 
 % UR3_1q = [0,0,0,90,90,0];
-% endf = UR3_1.fkine(deg2rad(UR3_1q));
+% endf = UR3_1.model.fkine(deg2rad(UR3_1q));
 % 
 % maxlen_left = endf(1:3,4)';
 % 
@@ -125,12 +128,12 @@ hold on
 
 % find the top position to get the R
 UR3_1q = [0,90,0,90,90,0];
-endf = UR3_1.fkine(deg2rad(UR3_1q));
+endf = UR3_1.model.fkine(deg2rad(UR3_1q));
 maxlen_top = abs( endf(1:3,4)' - [0,0,0.152] );
 
 % find the bottom position that will find h
 UR3_1q = [0,180,90,90,90,0];
-endf = UR3_1.fkine(deg2rad(UR3_1q));
+endf = UR3_1.model.fkine(deg2rad(UR3_1q));
 maxlen_bottom = endf(1:3,4)' - [0,0,0.152];
 
 % max without taking anything out
@@ -161,41 +164,41 @@ trplot(circuit_board_pose);
 % get pose
 % init pos
 UR3_1q = zeros(size(linkList)); 
-UR3_1.plot(UR3_1q)
+UR3_1.model.plot3d(UR3_1q)
 
-tempq = UR3_1.ikcon(housing_bottom_pose);
+tempq = UR3_1.model.ikcon(housing_bottom_pose);
 
-UR3_1.teach();
+UR3_1.model.teach();
 % animate 1 
-jointTrajectory = jtraj(UR3_1.getpos(), tempq,100);
+jointTrajectory = jtraj(UR3_1.model.getpos(), tempq,100);
 
 for trajStep = 1:size(jointTrajectory,1)
     q = jointTrajectory(trajStep,:);
-    UR3_1.animate(q);
+    UR3_1.model.animate(q);
     pause(0.01);
     trajStep
 end
 pause(0.01);
 % % back to start
-% tempq = UR3_1.ikcon(housing_top_pose,[1,1,0,0,1,1])
+% tempq = UR3_1.model.ikcon(housing_top_pose,[1,1,0,0,1,1])
 % % animate 2
-% jointTrajectory = jtraj(UR3_1.getpos(), zeros(size(linkList)),60)
+% jointTrajectory = jtraj(UR3_1.model.getpos(), zeros(size(linkList)),60)
 % 
 % for trajStep = 1:size(jointTrajectory,1)
 %     q = jointTrajectory(trajStep,:);
-%     UR3_1.animate(q);
+%     UR3_1.model.animate(q);
 %     pause(0.001);
 %     trajStep
 % end
 
 
-tempq = UR3_1.ikcon(housing_top_pose,[1,1,1,0,0,0]);
+tempq = UR3_1.model.ikcon(housing_top_pose,[1,1,1,0,0,0]);
 % animate 2
-jointTrajectory = jtraj(UR3_1.getpos(), tempq,60)
+jointTrajectory = jtraj(UR3_1.model.getpos(), tempq,60)
 
 for trajStep = 1:size(jointTrajectory,1)
     q = jointTrajectory(trajStep,:);
-    UR3_1.animate(q);
+    UR3_1.model.animate(q);
     pause(0.001);
     trajStep;
 end
@@ -203,4 +206,4 @@ end
 %% have a play
 "done"
 
-UR3_1.teach();
+UR3_1.model.teach();
