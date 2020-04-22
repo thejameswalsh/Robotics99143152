@@ -19,6 +19,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             end
             
         end
+        
         function PlotAndColour(self,location)
             for linkIndex = 0:self.model.n
                 [ faceData, vertexData, plyData{linkIndex + 1} ] = plyread(['link',num2str(linkIndex),'.ply'],'tri'); %#ok<AGROW>
@@ -59,6 +60,23 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             pause(0.0001)
             name = ['UR_3_',datestr(now,'yyyymmddTHHMMSSFFF')];
             self.model = SerialLink([L1 L2 L3 L4 L5 L6], 'name', name);             
+        end
+        
+        function [t] = withinBounds(self, q)
+            self.currentJoints = self.model.getpos();
+            Joints = q
+            t = 1;
+            [c,r] = size(Joints);
+            
+            current_link = transl(0,0,0);
+            
+            for joint = 1:r
+                current_link = current_link * self.model.A(joint,Joints);
+                if(current_link(3,4) < 0)
+                    t = 0;
+                    return
+                end
+            end
         end
     end
 end
