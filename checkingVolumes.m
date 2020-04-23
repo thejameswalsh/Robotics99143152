@@ -24,7 +24,7 @@ Max_Vol
 
 for i = 1 : pCloudSize
     if pointCloud(i,:) == [0,0,0]
-        pointCloud = pointCloud(1:i,:);
+        pointCloud = pointCloud(1:i-1,:);
         break
     end
 end
