@@ -64,15 +64,19 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
         
         function [t] = withinBounds(self, q)
             self.currentJoints = self.model.getpos();
-            Joints = q
+            Joints = q;
             t = 1;
             [c,r] = size(Joints);
             
-            current_link = transl(0,0,0);
+            %set current cords to be base location
+            current_link = self.location;
             
+            %iterate through all link pose to find if any go under the
+            %table
             for joint = 1:r
                 current_link = current_link * self.model.A(joint,Joints);
                 if(current_link(3,4) < 0)
+                    %if true return 0
                     t = 0;
                     return
                 end
