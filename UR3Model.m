@@ -7,6 +7,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
         plyData;   
         name;
         pointCloud;
+        qValueMatrix;
     end
     
     methods
@@ -29,6 +30,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             qlim = self.model.qlim;
             % Don't need to worry about joint 6
             pointCloudeSize = prod(floor((qlim(1:5,2)-qlim(1:5,1))/stepRads + 1));
+            qValueMatrix = zeros(pointCloudeSize,6);
             pointCloud = ones(pointCloudeSize,3) .* self.model.base(1:3,4)';
             counter = 1;
             count = 1;
@@ -44,6 +46,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
 %                               for q6 = qlim(6,1):stepRads:qlim(6,2)
                                     q = [q1,q2,q3,q4,q5,q6];
                                     if(self.withinBounds(q) == 1)
+                                        qValueMatrix(counter,:) = q;
                                         tr = self.model.fkine(q);                        
                                         pointCloud(counter,:) = tr(1:3,4)';
                                         counter = counter + 1;                                    
@@ -67,6 +70,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
                 end
             end
             self.pointCloud = pointCloud;
+            self.qValueMatrix = qValueMatrix;
             save('PcloudReduced','pointCloud');
         end
         
@@ -96,6 +100,22 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
                 [k, Vol] = convhull(self.pointCloud);
             end             
         end
+        
+        function [Reach, index] = MaxRobotReach(self)
+            if isempty(self.pointCloud)
+                Reach = 0;
+                display('no point cloud generated for this model yet');
+            else
+                [r,c] = size(pointCloud);
+                output = zeros(r,1);
+
+                for i=1:r
+                    output(i,1) = norm(self.model.base - pointCloud(i,:));
+                end
+
+                [Reach,index] = max(output);
+            end             
+        end           
         
         function PlotAndColour(self,location)
             for linkIndex = 0:self.model.n
@@ -160,3 +180,12 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
         end
     end
 end
+
+% leftBaseP = [leftBase(1,4),leftBase(2,4),leftBase(3,4)]
+% rightArmP = [rightArm(1,4),rightArm(2,4),rightArm(3,4)]
+% 
+% A = leftBaseP;
+% B = rightArmP;
+% 
+% result = norm( A - B )
+% result * 1000

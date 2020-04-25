@@ -32,3 +32,20 @@ end
 [k, Max_Vol] = convhull(pointCloud);
 
 Max_Vol
+
+%% check out max reach
+
+[r,c] = size(pointCloud);
+
+a = [0.4000,0.2000,0];
+b = pointCloud;
+
+out = zeros(r,1);
+
+for i=1:r
+    out(i,1) = norm(a - b(i,:));
+end
+
+[M,I] = max(out)
+out(514)
+

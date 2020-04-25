@@ -53,7 +53,7 @@ switch chunk
 end
 
 % plot from tutorials 
-% plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
 
 %% finding max reach
 
@@ -204,3 +204,4 @@ end
 "done"
 
 UR3_1.model.teach();
+
