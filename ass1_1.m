@@ -65,32 +65,6 @@ hold off
 
 close all
 
-%% area through raidus and ideal angles
-% 
-% % find the top position to get the R
-% UR3_1q = [0,90,0,90,90,0];
-% endf = UR3_1.model.fkine(deg2rad(UR3_1q));
-% maxlen_top = abs( endf(1:3,4)' - [0,0,0.152] );
-% 
-% % find the bottom position that will find h
-% UR3_1q = [0,180,90,90,90,0];
-% endf = UR3_1.model.fkine(deg2rad(UR3_1q));
-% maxlen_bottom = endf(1:3,4)' - [0,0,0.152];
-% 
-% % max without taking anything out
-% % would mean arm bent back on itself 
-% Max_vol = ( 4 * pi * maxlen_top(3)^3 ) / 3
-% 
-% % doesn't yet include floor must ask
-% % https://mathworld.wolfram.com/SphericalCap.html?fbclid=IwAR13igaa2iavUjBd3vyHoOVTVOrUEAFUITtciWRmLwOi0T3nV4ReMzjtfS8
-% h = maxlen_top(3) - maxlen_bottom(3);
-% Max_vol = (pi * h^2 * (3 * maxlen_top(3) - h)) / 3;
-% 
-% % 230 is only for the mdl arm replace with math from link to work out
-% % variable for first arm
-% redundant_vol = pi * 0.230^2 *  abs(maxlen_bottom(3));
-% Max_vol = Max_vol - redundant_vol
-
 %% place items down?
 
 zoffset = -0.1;
