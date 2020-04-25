@@ -47,7 +47,7 @@ switch chunk
 % 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
 % & 2.5 Use fkine to determine the point in space for each of these poses, so that you end up with a big list of points
     case 0
-        pointCloud = UR3_1.GeneratePointCloud(90);
+        pointCloud = UR3_1.GeneratePointCloud(30);
     case 1
         pointCloud = UR3_1.LoadPointCloud();
 end
