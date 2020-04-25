@@ -6,6 +6,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
         workspace;
         plyData;   
         name;
+        pointCloud;
     end
     
     methods
@@ -23,7 +24,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             
         end
         
-        function GeneratePointCloud(self, stepSize)
+        function [pointCloud] = GeneratePointCloud(self, stepSize)
             stepRads = deg2rad(stepSize);
             qlim = self.model.qlim;
             % Don't need to worry about joint 6
@@ -57,6 +58,33 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
                     end
                 end
             end
+%             ReducePointCloud(pointCloud);    
+
+            for i = 1 : pointCloudeSize
+                if pointCloud(i,:) == self.model.base(1:3,4)'
+                    pointCloud = pointCloud(1:i-1,:);
+                    break
+                end
+            end
+            self.pointCloud = pointCloud;
+            save('PcloudReduced','pointCloud');
+        end
+        
+        function [pCloud] = LoadPointCloud(self)
+            self.pointCloud = load('PcloudReduced');
+            pCloud = self.pointCloud;
+        end
+        
+        function ReducePointCloud(self, pointCloud)
+            [pCloudSize, c] = size(pointCloud);
+
+            for i = 1 : pCloudSize
+                if pointCloud(i,:) == self.model.base(1:3,4)'
+                    pointCloud = pointCloud(1:i-1,:);
+                    break
+                end
+            end
+            self.pointCloud = pointCloud;
             save('PcloudReduced','pointCloud');
         end
         

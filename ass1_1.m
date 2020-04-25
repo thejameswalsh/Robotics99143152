@@ -42,47 +42,14 @@ pause(0.01);
 
 % prompt = 'Select a robot model; MDL = 1 PERSONAL = 2: ';
 % chunk = input(prompt);
-chunk = 1;
+chunk = 0;
 switch chunk
 % 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
 % & 2.5 Use fkine to determine the point in space for each of these poses, so that you end up with a big list of points
     case 0
-        stepRads = deg2rad(30);
-        qlim = UR3_1.model.qlim;
-        % Don't need to worry about joint 6
-        pointCloudeSize = prod(floor((qlim(1:5,2)-qlim(1:5,1))/stepRads + 1));
-        pointCloud = ones(pointCloudeSize,3) .* UR3_1.model.base(1:3,4)'
-        counter = 1;
-        count = 1;
-        tic
-
-        for q1 = qlim(1,1):stepRads:qlim(1,2)
-            for q2 = qlim(2,1):stepRads:qlim(2,2)
-                for q3 = qlim(3,1):stepRads:qlim(3,2)
-                    for q4 = qlim(4,1):stepRads:qlim(4,2)
-                        for q5 = qlim(5,1):stepRads:qlim(5,2)
-                            % Don't need to worry about joint 6, just assume it=0
-                            q6 = 0;
-%                           for q6 = qlim(6,1):stepRads:qlim(6,2)
-                                q = [q1,q2,q3,q4,q5,q6];
-                                if(UR3_1.withinBounds(q) == 1)
-                                    tr = UR3_1.model.fkine(q);                        
-                                    pointCloud(counter,:) = tr(1:3,4)';
-                                    counter = counter + 1;                                    
-                                end
-                                count = count + 1;
-                                if mod(count/pointCloudeSize * 100,1) == 0
-                                    display(['After ',num2str(toc),' seconds, completed ',num2str(count/pointCloudeSize * 100),'% of poses']);
-                                end
-%                        	end
-                        end
-                    end
-                end
-            end
-        end
-        save('PcloudReduced','pointCloud');
+        pointCloud = UR3_1.GeneratePointCloud(90);
     case 1
-        load('PcloudReduced');
+        pointCloud = UR3_1.LoadPointCloud();
 end
 
 % plot from tutorials 
