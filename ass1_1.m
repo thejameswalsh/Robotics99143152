@@ -58,7 +58,7 @@ end
 
 Max_Reach = Reach
 
-prompt = 'Would you like to plot max reach; 0 = NO 1 = YES';
+prompt = 'Would you like to plot max reach; 0 = NO 1 = YES ';
 chunk = input(prompt);
 switch chunk
 % 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
@@ -69,15 +69,28 @@ switch chunk
         UR3_1.model.plot3d(UR3_1.qValueMatrix(Index,:));
 end
 
-%% plot point cloud
-% plot from tutorials 
-plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+
 
 %% finding max reach
 
-% [k, Max_Vol] = convhull(pointCloud);
+Max_Volume = UR3_1.MaxRobotVolume()
 
-% Max_Vol
+%% plot point cloud
+ 
+prompt = 'Would you like to plot the point cloud; 0 = NO 1 = YES ';
+chunk = input(prompt);
+switch chunk
+% 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
+% & 2.5 Use fkine to determine the point in space for each of these poses, so that you end up with a big list of points
+    case 0
+        
+    case 1
+        % plot from tutorials
+        plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+end
+
+
+%% finish section
 
 hold off
 
