@@ -8,29 +8,6 @@ clc
 
 %% modelling UR3 Robot 1
 
-% prompt = 'Select a robot model; MDL = 1 PERSONAL = 2: ';
-% chunk = input(prompt);
-chunk = 1;
-switch chunk
-    case 1 %MDL
-        L1 = Link('d',0.152,'a',0.0,'alpha',deg2rad(90),'offset',0,'qlim',[deg2rad(-360),deg2rad(360)]);
-        L2 = Link('d',0.0,'a',0.230,'alpha',deg2rad(0),'offset',0,'qlim',[deg2rad(-360),deg2rad(360)]);
-        L3 = Link('d',0.0,'a',0.213,'alpha',deg2rad(0),'offset',0,'qlim',[deg2rad(-360),deg2rad(360)]);
-        L4 = Link('d',0.0,'a',0.0,'alpha',deg2rad(90),'offset',0,'qlim',[deg2rad(-360),deg2rad(360)]);
-        L5 = Link('d',0.083,'a',0.0,'alpha',deg2rad(-90),'offset',pi/2,'qlim',[deg2rad(-360),deg2rad(360)]);
-        L6 = Link('d',0.082,'a',0.0,'alpha',deg2rad(0),'offset',0,'qlim',[deg2rad(-360),deg2rad(360)]);
-    case 2 %PERSONAL
-        L1 = Link('d',0.152,'a',0,'alpha',deg2rad(90),'offset',0);
-        L2 = Link('d',-0.120,'a',0.230,'alpha',deg2rad(0),'offset',0);
-        L3 = Link('d',0.093,'a',0.213,'alpha',deg2rad(-180),'offset',0);
-        L4 = Link('d',0.083,'a',0.0,'alpha',deg2rad(90),'offset',0);
-        L5 = Link('d',0.083,'a',0.0,'alpha',deg2rad(90),'offset',0);
-        L6 = Link('d',0.082,'a',0.0,'alpha',deg2rad(0),'offset',0);
-end
-
-linkList = [L1 L2 L3 L4 L5 L6];
-size(linkList);
-
 workSize = 0.6;
 workspace = [-workSize workSize -workSize workSize -workSize workSize];
 scale = 0;
@@ -47,26 +24,22 @@ switch init
         z = input(prompt);
     case 1
         x = 0;
-        y = 0;
-        z = 0;
+        y = 0.5;
+        z = 0.5;
 end
 
 % UR3_1 = SerialLink(linkList,'name','UR3_1','base',transl(x,y,z));
 UR3_1 = UR3Model(workspace, transl(x,y,z), 1);
 
-UR3_1.model.teach()
+% UR3_1.model.teach()
 % UR3_1.model.teach();
 
-UR3_1q = zeros(size(linkList));        
+% UR3_1q = zeros(size(linkList));        
 UR3_1q = [0,90,0,90,0,0];
 endf = UR3_1.model.fkine(deg2rad(UR3_1q));
 
 UR3_1.model.plot3d(deg2rad(UR3_1q));
 hold on
-
-% a = UR3_1.model.fkine(UR3_1q)
-% 0.540 + 0.152 - a(3,4)
-% 0.540 + 0.152
 
 %% modelling UR3 Robot 2
 
@@ -124,9 +97,10 @@ switch chunk
                                     tr = UR3_1.model.fkine(q);                        
                                     pointCloud(counter,:) = tr(1:3,4)';
                                     counter = counter + 1; 
-                                    if mod(counter/pointCloudeSize * 100,1) == 0
-                                        display(['After ',num2str(toc),' seconds, completed ',num2str(counter/pointCloudeSize * 100),'% of poses']);
-                                    end
+                                    
+                                end
+                                if mod(counter/pointCloudeSize * 100,1) == 0
+                                    display(['After ',num2str(toc),' seconds, completed ',num2str(counter/pointCloudeSize * 100),'% of poses']);
                                 end
 %                        	end
                         end

@@ -13,6 +13,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             self.getRobot();
             self.currentJoints = zeros(1,6);
             self.model.base = location;
+            self.location = location;
             
             if draw
                 self.PlotAndColour(self.location);
@@ -63,7 +64,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
         end
         
         function [t] = withinBounds(self, q)
-            self.currentJoints = self.model.getpos();
+%             self.currentJoints = self.model.getpos();
             Joints = q;
             t = 1;
             [c,r] = size(Joints);
