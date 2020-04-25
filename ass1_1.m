@@ -32,7 +32,7 @@ end
 % UR3_1 = SerialLink(linkList,'name','UR3_1','base',transl(x,y,z));
 UR3_1 = UR3Model('UR3_1',workspace, transl(x,y,z), 1);
 
-UR3_2 = UR3Model('UR3_2',workspace, transl(0.3,-0.1,z), 1);
+UR3_2 = UR3Model('UR3_2',workspace, transl(-0.1,-0.05,z), 1);
 
 pause(0.01);
 
@@ -146,39 +146,44 @@ initQ = [0,0,0,0,0,0];
 UR3_1.model.plot3d(initQ)
 UR3_2.model.plot3d(initQ)
 
-goalQ = UR3_1.model.ikcon(housing_bottom_pose * transl(0,0,zoffset),UR3_1.model.getpos);
-
 % animate 1 
+goalQ = UR3_1.model.ikcon(housing_top_pose * transl(0,0,zoffset),UR3_1.model.getpos);
 jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
 
 for trajStep = 1:size(jointTrajectory,1)
     q = jointTrajectory(trajStep,:);
     UR3_1.model.animate(q);
     pause(0.01);
-    trajStep
-end
-pause(0.01);
-
-goalQ = UR3_1.model.ikcon(housing_bottom_pose,UR3_1.model.getpos);
-
-% animate 1 
-jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_1.model.animate(q);
-    pause(0.01);
-    trajStep
 end
 pause(0.01);
 
 goalQ = UR3_1.model.ikcon(housing_top_pose,UR3_1.model.getpos);
-% animate 2
-jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,60)
+jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
 
 for trajStep = 1:size(jointTrajectory,1)
     q = jointTrajectory(trajStep,:);
     UR3_1.model.animate(q);
+    pause(0.01);
+end
+pause(0.01);
+
+% animate 2
+goalQ = UR3_2.model.ikcon(circuit_board_pose * transl(0,0,zoffset),UR3_2.model.getpos);
+jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+
+for trajStep = 1:size(jointTrajectory,1)
+    q = jointTrajectory(trajStep,:);
+    UR3_2.model.animate(q);
+    pause(0.001);
+    trajStep;
+end
+
+goalQ = UR3_2.model.ikcon(circuit_board_pose,UR3_2.model.getpos);
+jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+
+for trajStep = 1:size(jointTrajectory,1)
+    q = jointTrajectory(trajStep,:);
+    UR3_2.model.animate(q);
     pause(0.001);
     trajStep;
 end
@@ -186,4 +191,4 @@ end
 %% have a play
 "done"
 
-UR3_1.model.teach();
+UR3_2.model.teach();
