@@ -106,11 +106,11 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
                 Reach = 0;
                 display('no point cloud generated for this model yet');
             else
-                [r,c] = size(pointCloud);
+                [r,c] = size(self.pointCloud);
                 output = zeros(r,1);
 
                 for i=1:r
-                    output(i,1) = norm(self.model.base - pointCloud(i,:));
+                    output(i,1) = norm(self.model.base(1:3,4)' - self.pointCloud(i,:));
                 end
 
                 [Reach,index] = max(output);
