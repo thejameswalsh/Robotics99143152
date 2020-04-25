@@ -51,7 +51,7 @@ switch chunk
         qlim = UR3_1.model.qlim;
         % Don't need to worry about joint 6
         pointCloudeSize = prod(floor((qlim(1:5,2)-qlim(1:5,1))/stepRads + 1));
-        pointCloud = zeros(pointCloudeSize,3);
+        pointCloud = ones(pointCloudeSize,3) .* UR3_1.model.base(1:3,4)'
         counter = 1;
         count = 1;
         tic
@@ -85,7 +85,7 @@ switch chunk
         load('PcloudReduced');
 end
 
-% 2.6 Create a 3D model showing where the end effector can be over all these samples.  
+% plot from tutorials 
 % plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
 
 %% finding max reach
