@@ -127,6 +127,9 @@ close all
 %% place items down?
 
 zoffset = -0.1;
+handoffLocation = ((UR3_1.model.base*UR3_2.model.base)/2);
+handoffLocation = handoffLocation(1:3,4);
+handoffLocation = transl(handoffLocation) * transl(0,0,max(handoffLocation)/2);
 
 housing_top_pose = transl(0,0.25,0) * trotx(pi)
 housing_bottom_pose = transl(0.15,0.3,0) * trotx(pi)
@@ -187,6 +190,32 @@ for trajStep = 1:size(jointTrajectory,1)
     pause(0.001);
     trajStep;
 end
+
+%% put together
+
+% animate 1 
+goalQ = UR3_1.model.ikcon(handoffLocation,UR3_1.model.getpos);
+jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
+
+for trajStep = 1:size(jointTrajectory,1)
+    q = jointTrajectory(trajStep,:);
+    UR3_1.model.animate(q);
+    pause(0.01);
+end
+pause(0.01);
+
+% animate 2
+goalQ = UR3_2.model.ikcon(handoffLocation * trotx(pi),UR3_2.model.getpos);
+jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+
+for trajStep = 1:size(jointTrajectory,1)
+    q = jointTrajectory(trajStep,:);
+    UR3_2.model.animate(q);
+    pause(0.001);
+    trajStep;
+end
+
+
 
 %% have a play
 "done"
