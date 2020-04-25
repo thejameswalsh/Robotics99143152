@@ -126,6 +126,8 @@ close all
 
 %% place items down?
 
+zoffset = -0.1;
+
 housing_top_pose = transl(0,0.25,0) * trotx(pi)
 housing_bottom_pose = transl(0.15,0.3,0) * trotx(pi)
 circuit_board_pose = transl(-0.2,0.35,0) * trotx(pi)
@@ -140,14 +142,14 @@ trplot(circuit_board_pose,'length',0.1);
 
 % get pose
 % init pos
-UR3_1q = [0,0,0,0,0,0]; 
-UR3_1.model.plot3d(UR3_1q)
+initQ = [0,0,0,0,0,0]; 
+UR3_1.model.plot3d(initQ)
+UR3_2.model.plot3d(initQ)
 
-tempq = UR3_1.model.ikcon(housing_bottom_pose);
+goalQ = UR3_1.model.ikcon(housing_bottom_pose * transl(0,0,zoffset),UR3_1.model.getpos);
 
-UR3_1.model.teach();
 % animate 1 
-jointTrajectory = jtraj(UR3_1.model.getpos(), tempq,100);
+jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
 
 for trajStep = 1:size(jointTrajectory,1)
     q = jointTrajectory(trajStep,:);
@@ -156,22 +158,23 @@ for trajStep = 1:size(jointTrajectory,1)
     trajStep
 end
 pause(0.01);
-% % back to start
-% tempq = UR3_1.model.ikcon(housing_top_pose,[1,1,0,0,1,1])
-% % animate 2
-% jointTrajectory = jtraj(UR3_1.model.getpos(), zeros(size(linkList)),60)
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_1.model.animate(q);
-%     pause(0.001);
-%     trajStep
-% end
 
+goalQ = UR3_1.model.ikcon(housing_bottom_pose,UR3_1.model.getpos);
 
-tempq = UR3_1.model.ikcon(housing_top_pose,[1,1,1,0,0,0]);
+% animate 1 
+jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
+
+for trajStep = 1:size(jointTrajectory,1)
+    q = jointTrajectory(trajStep,:);
+    UR3_1.model.animate(q);
+    pause(0.01);
+    trajStep
+end
+pause(0.01);
+
+goalQ = UR3_1.model.ikcon(housing_top_pose,UR3_1.model.getpos);
 % animate 2
-jointTrajectory = jtraj(UR3_1.model.getpos(), tempq,60)
+jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,60)
 
 for trajStep = 1:size(jointTrajectory,1)
     q = jointTrajectory(trajStep,:);

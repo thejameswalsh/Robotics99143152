@@ -6,8 +6,9 @@ set(0,'DefaultFigureWindowStyle','docked')
 clear
 clc
 
-%% modelling UR3 Robot 1
+%% modelling UR3 Robots
 
+hold on
 workSize = 0.6;
 workspace = [-workSize workSize -workSize workSize -workSize workSize];
 scale = 0;
@@ -25,41 +26,17 @@ switch init
     case 1
         x = 0;
         y = 0.5;
-        z = 0.1;
+        z = 0;
 end
 
 % UR3_1 = SerialLink(linkList,'name','UR3_1','base',transl(x,y,z));
 UR3_1 = UR3Model('UR3_1',workspace, transl(x,y,z), 1);
 
-UR3_1.model.teach()
+UR3_2 = UR3Model('UR3_2',workspace, transl(0.3,-0.1,z), 1);
 
-hold on
+pause(0.01);
 
-%% modelling UR3 Robot 2
-
-% % enter base location information
-% init = 1;
-% switch init
-%     case 0 
-%         prompt = 'Select an inital x: ';
-%         x = input(prompt);
-%         prompt = 'Select an inital y: ';
-%         y = input(prompt);
-%         prompt = 'Select an inital z: ';
-%         z = input(prompt);
-%     case 1
-%         x = 0.5;
-%         y = 0.5;
-%         z = 0;
-% end
-% 
-% UR3_2 = SerialLink(linkList,'name','UR3_2','base',transl(x,y,z));
-%     
-% UR3_2q = [0,90,0,90,0,0];
-% endf = UR3_2.fkine(deg2rad(UR3_2q));
-% 
-% UR3_2.plot3d(deg2rad(UR3_2q));
-% hold on
+%% Modelling bodies 
 
 %% finding max reach Point cloud
 
@@ -109,13 +86,13 @@ switch chunk
 end
 
 % 2.6 Create a 3D model showing where the end effector can be over all these samples.  
-plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+% plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
 
 %% finding max reach
 
-[k, Max_Vol] = convhull(pointCloud);
+% [k, Max_Vol] = convhull(pointCloud);
 
-Max_Vol
+% Max_Vol
 
 hold off
 
@@ -153,16 +130,19 @@ housing_top_pose = transl(0,0.25,0) * trotx(pi)
 housing_bottom_pose = transl(0.15,0.3,0) * trotx(pi)
 circuit_board_pose = transl(-0.2,0.35,0) * trotx(pi)
 
-trplot(housing_top_pose);
+hold on
+
+trplot(housing_top_pose,'length',0.1);
 % hold on
-trplot(housing_bottom_pose);
+trplot(housing_bottom_pose,'length',0.1);
 % hold on
-trplot(circuit_board_pose);
+trplot(circuit_board_pose,'length',0.1);
 
 % get pose
 % init pos
-UR3_1q = [0,0,0,0,0,0]; 
-UR3_1.model.plot3d(UR3_1q)
+initQ = [0,0,0,0,0,0]; 
+UR3_1.model.plot3d(initQ)
+UR3_2.model.plot3
 
 tempq = UR3_1.model.ikcon(housing_bottom_pose);
 
