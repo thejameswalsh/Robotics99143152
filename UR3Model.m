@@ -88,6 +88,15 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             save('PcloudReduced','pointCloud');
         end
         
+        function Vol = MaxRobotVolume(self)
+            if isempty(self.pointCloud)
+                Vol = 0;
+                display('no point cloud generated for this model yet');
+            else
+                [k, Vol] = convhull(self.pointCloud);
+            end             
+        end
+        
         function PlotAndColour(self,location)
             for linkIndex = 0:self.model.n
                 [ faceData, vertexData, plyData{linkIndex + 1} ] = plyread(['link',num2str(linkIndex),'.ply'],'tri'); %#ok<AGROW>
