@@ -24,8 +24,8 @@ switch init
         prompt = 'Select an inital z: ';
         z = input(prompt);
     case 1
-        x = 0;
-        y = 0.5;
+        x = 0.4;
+        y = 0.2;
         z = 0;
 end
 
@@ -127,13 +127,22 @@ close all
 %% place items down?
 
 zoffset = -0.1;
+
+housing_top_location = [0.2,0,0]
+housing_bottom_location = [0.3,0,0]
+circuit_board_location = [-0.1,0.2,0]
+
 handoffLocation = ((UR3_1.model.base*UR3_2.model.base)/2);
 handoffLocation = handoffLocation(1:3,4);
-handoffLocation = transl(handoffLocation) * transl(0,0,max(handoffLocation)/2);
+if (max(handoffLocation)/2) < 0.25
+    handoffLocation = transl(handoffLocation) * transl(0,0,0.25);
+else
+    handoffLocation = transl(handoffLocation) * transl(0,0,max(handoffLocation)/2);
+end
 
-housing_top_pose = transl(0,0.25,0) * trotx(pi)
-housing_bottom_pose = transl(0.15,0.3,0) * trotx(pi)
-circuit_board_pose = transl(-0.2,0.35,0) * trotx(pi)
+housing_top_pose = transl(housing_top_location) * trotx(pi)
+housing_bottom_pose = transl(housing_bottom_location) * trotx(pi)
+circuit_board_pose = transl(circuit_board_location) * trotx(pi)
 
 hold on
 
@@ -215,9 +224,42 @@ for trajStep = 1:size(jointTrajectory,1)
     trajStep;
 end
 
+%% get third part
 
+% animate 2
+goalQ = UR3_2.model.ikcon(housing_bottom_pose * transl(0,0,zoffset),UR3_2.model.getpos);
+jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+
+for trajStep = 1:size(jointTrajectory,1)
+    q = jointTrajectory(trajStep,:);
+    UR3_2.model.animate(q);
+    pause(0.001);
+    trajStep;
+end
+
+goalQ = UR3_2.model.ikcon(housing_bottom_pose,UR3_2.model.getpos);
+jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+
+for trajStep = 1:size(jointTrajectory,1)
+    q = jointTrajectory(trajStep,:);
+    UR3_2.model.animate(q);
+    pause(0.001);
+    trajStep;
+end
+
+%% place together
+% animate 2
+goalQ = UR3_2.model.ikcon(handoffLocation * trotx(pi),UR3_2.model.getpos);
+jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+
+for trajStep = 1:size(jointTrajectory,1)
+    q = jointTrajectory(trajStep,:);
+    UR3_2.model.animate(q);
+    pause(0.001);
+    trajStep;
+end
 
 %% have a play
 "done"
 
-UR3_2.model.teach();
+UR3_1.model.teach();
