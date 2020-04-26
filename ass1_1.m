@@ -29,10 +29,20 @@ switch init
         z = 0;
 end
 
-% UR3_1 = SerialLink(linkList,'name','UR3_1','base',transl(x,y,z));
+% import arms
 UR3_1 = UR3Model('UR3_1',workspace, transl(x,y,z), 1);
-
 UR3_2 = UR3Model('UR3_2',workspace, transl(-0.1,-0.05,z), 1);
+
+% import objects
+% fix translations
+% Table = Objects('table','1',workspace,transl(x,y,z));
+% Fence1 = Objects('fence','1',workspace,transl(x,y,z));
+% Fence2 = Objects('fence','2',workspace,transl(x,y,z) * trotz(pi/2));
+% Fence3 = Objects('fence','3',workspace,transl(2*x,y,z) * trotz(pi));
+% Fence4 = Objects('fence','4',workspace,transl(2*x,y,z) * trotz((3 *pi)/2));
+HousingTop = Objects('housingTop','1',workspace,transl(1,y,z));
+HousingBottom = Objects('housingBottom','1',workspace,transl(0.5,y,z));
+CircuitBoard = Objects('circuitBoard','1',workspace,transl(0,y,z));
 
 pause(0.01);
 
