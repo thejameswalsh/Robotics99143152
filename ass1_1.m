@@ -42,7 +42,7 @@ pause(0.01);
 
 % prompt = 'Select a robot model; MDL = 1 PERSONAL = 2: ';
 % chunk = input(prompt);
-chunk = 1;
+chunk = 0;
 switch chunk
 % 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
 % & 2.5 Use fkine to determine the point in space for each of these poses, so that you end up with a big list of points

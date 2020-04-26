@@ -20,7 +20,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             self.name = name;
             
             if draw
-                self.PlotAndColour(self.location);
+                self.PlotAndColour();
             end
             
         end
@@ -29,8 +29,8 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             stepRads = deg2rad(stepSize);
             qlim = self.model.qlim;
             % Don't need to worry about joint 6
-            pointCloudeSize = prod(floor((qlim(1:5,2)-qlim(1:5,1))/stepRads + 1));
-            qValueMatrix = zeros(pointCloudeSize,6);
+            pointCloudeSize = prod(floor((qlim(1:(self.model.n - 1),2)-qlim(1:(self.model.n - 1),1))/stepRads + 1));
+            qValueMatrix = zeros(pointCloudeSize,self.model.n);
             pointCloud = ones(pointCloudeSize,3) .* self.model.base(1:3,4)';
             counter = 1;
             count = 1;
@@ -119,7 +119,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             end             
         end           
         
-        function PlotAndColour(self,location)
+        function PlotAndColour(self)
             for linkIndex = 0:self.model.n
                 [ faceData, vertexData, plyData{linkIndex + 1} ] = plyread(['link',num2str(linkIndex),'.ply'],'tri'); %#ok<AGROW>
                 self.model.faces{linkIndex + 1} = faceData;
@@ -164,14 +164,13 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
 %             self.currentJoints = self.model.getpos();
             Joints = q;
             t = 1;
-            [c,r] = size(Joints);
             
             %set current cords to be base location
             current_link = self.location;
             
             %iterate through all link pose to find if any go under the
             %table
-            for joint = 1:r
+            for joint = 1:self.model.n
                 current_link = current_link * self.model.A(joint,Joints);
                 if(current_link(3,4) < 0)
                     %if true return 0
@@ -182,12 +181,3 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
         end
     end
 end
-
-% leftBaseP = [leftBase(1,4),leftBase(2,4),leftBase(3,4)]
-% rightArmP = [rightArm(1,4),rightArm(2,4),rightArm(3,4)]
-% 
-% A = leftBaseP;
-% B = rightArmP;
-% 
-% result = norm( A - B )
-% result * 1000

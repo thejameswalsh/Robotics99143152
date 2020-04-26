@@ -1,30 +1,29 @@
 classdef Objects < handle % class to handle setting up of the static body
     properties
         model;
-        faceData;
-        vertexData;
         plyData;
         workspace;
         location;
     end
     
     methods
-        function self = Objects(Modelname, workspace, location)
-            self.plotAndColour(Modelname, workspace, location);
+        function self = Objects(ModelName, ModelNum, workspace, location)
+            self.plotAndColour(workspace, ModelName, ModelNum, location);
             camlight;
         end
                
-        function plotAndColour(self, Modelname, workspace, location)
-            if isempty(self.faceData) || isempty(self.vertexData) || isempty(self.plyData)
-                [self.faceData,self.vertexData,self.plyData] = plyread([Modelname, '.ply'],'tri');
-                % ply file data of bodys is stored for each body
+        function plotAndColour(self, workspace, ModelName, ModelNum, location)
+            for linkIndex = 0:1
+                [ faceData, vertexData, plyData{linkIndex + 1} ] = plyread([ModelName,'.ply'],'tri');
+                self.model.faces{linkIndex + 1} = faceData;
+                self.model.points{linkIndex + 1} = vertexData;
             end
             
             L1 = Link('alpha',0,'a',1,'d',0,'offset',0);
-            self.model = SerialLink(L1, 'name' , Modelname);
+            self.model = SerialLink(L1, 'name' , [ModelName,'_', num2str(ModelNum)]);
             % 1 link robot used to simulate bodys for simplicity
-            self.model.faces = {self.faceData,[]};
-            self.model.points = {self.vertexData,[]};
+            self.model.faces = {faceData,[]};
+            self.model.points = {vertexData,[]};
             
             % Display body
             self.model.base = location;
@@ -46,4 +45,3 @@ classdef Objects < handle % class to handle setting up of the static body
         end
     end
 end
-
