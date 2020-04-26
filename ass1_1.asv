@@ -31,8 +31,9 @@ end
 
 % UR3_1 = SerialLink(linkList,'name','UR3_1','base',transl(x,y,z));
 UR3_1 = UR3Model('UR3_1',workspace, transl(x,y,z), 1);
-
 UR3_2 = UR3Model('UR3_2',workspace, transl(-0.1,-0.05,z), 1);
+
+Table = Objects('table
 
 pause(0.01);
 
@@ -47,7 +48,7 @@ switch chunk
 % 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
 % & 2.5 Use fkine to determine the point in space for each of these poses, so that you end up with a big list of points
     case 0
-        pointCloud = UR3_1.GeneratePointCloud(90);
+        pointCloud = UR3_1.GeneratePointCloud(45);
     case 1
         pointCloud = UR3_1.LoadPointCloud();
 end
@@ -58,31 +59,45 @@ end
 
 Max_Reach = Reach
 
-prompt = 'Would you like to plot max ';
+prompt = 'Would you like to plot max reach; 0 = NO 1 = YES ';
 chunk = input(prompt);
-chunk = 0;
 switch chunk
 % 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
 % & 2.5 Use fkine to determine the point in space for each of these poses, so that you end up with a big list of points
     case 0
-        pointCloud = UR3_1.GeneratePointCloud(90);
+        
     case 1
-        pointCloud = UR3_1.LoadPointCloud();
+        UR3_1.model.animate(UR3_1.qValueMatrix(Index,:));
 end
 
-%% plot point cloud
-% plot from tutorials 
-plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+
 
 %% finding max reach
 
-% [k, Max_Vol] = convhull(pointCloud);
+Max_Volume = UR3_1.MaxRobotVolume()
 
-% Max_Vol
+%% plot point cloud
+ 
+prompt = 'Would you like to plot the point cloud; 0 = NO 1 = YES ';
+chunk = input(prompt);
+switch chunk
+% 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
+% & 2.5 Use fkine to determine the point in space for each of these poses, so that you end up with a big list of points
+    case 0
+        
+    case 1
+        % plot from tutorials
+        pointCloudPlot = plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+        prompt = 'Press enter when done with demo';
+        input(prompt);
+        delete(pointCloudPlot)
+end
 
-hold off
+%% finish section
 
-close all
+% hold off
+
+% close all
 
 %% place items down?
 
@@ -115,8 +130,8 @@ trplot(circuit_board_pose,'length',0.1);
 % get pose
 % init pos
 initQ = [0,0,0,0,0,0]; 
-UR3_1.model.plot3d(initQ)
-UR3_2.model.plot3d(initQ)
+% UR3_1.model.plot3d(initQ)
+% UR3_2.model.plot3d(initQ)
 
 % animate 1 
 goalQ = UR3_1.model.ikcon(housing_top_pose * transl(0,0,zoffset),UR3_1.model.getpos);
