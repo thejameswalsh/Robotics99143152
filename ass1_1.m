@@ -47,7 +47,7 @@ switch chunk
 % 2.4 Sample the joint angles within the joint limits at 30 degree increments between each of the joint limits
 % & 2.5 Use fkine to determine the point in space for each of these poses, so that you end up with a big list of points
     case 0
-        pointCloud = UR3_1.GeneratePointCloud(30);
+        pointCloud = UR3_1.GeneratePointCloud(45);
     case 1
         pointCloud = UR3_1.LoadPointCloud();
 end
@@ -66,7 +66,7 @@ switch chunk
     case 0
         
     case 1
-        UR3_1.model.plot3d(UR3_1.qValueMatrix(Index,:));
+        UR3_1.model.animate(UR3_1.qValueMatrix(Index,:));
 end
 
 
@@ -86,15 +86,17 @@ switch chunk
         
     case 1
         % plot from tutorials
-        plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+        pointCloudPlot = plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+        prompt = 'Press enter when done with demo';
+        input(prompt);
+        delete(pointCloudPlot)
 end
-
 
 %% finish section
 
-hold off
+% hold off
 
-close all
+% close all
 
 %% place items down?
 
@@ -127,8 +129,8 @@ trplot(circuit_board_pose,'length',0.1);
 % get pose
 % init pos
 initQ = [0,0,0,0,0,0]; 
-UR3_1.model.plot3d(initQ)
-UR3_2.model.plot3d(initQ)
+% UR3_1.model.plot3d(initQ)
+% UR3_2.model.plot3d(initQ)
 
 % animate 1 
 goalQ = UR3_1.model.ikcon(housing_top_pose * transl(0,0,zoffset),UR3_1.model.getpos);

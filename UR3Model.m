@@ -71,12 +71,13 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             end
             self.pointCloud = pointCloud;
             self.qValueMatrix = qValueMatrix;
-            save('PcloudReduced','pointCloud');
+            save('PcloudReduced','pointCloud','qValueMatrix');
         end
         
         function [pCloud] = LoadPointCloud(self)
-            temp = load('PcloudReduced','pointCloud');
+            temp = load('PcloudReduced','pointCloud','qValueMatrix');
             self.pointCloud = temp.pointCloud;
+            self.qValueMatrix = temp.qValueMatrix;
             pCloud = self.pointCloud;
         end
         
