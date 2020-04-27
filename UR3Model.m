@@ -151,7 +151,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
             pause(0.001);
             L1 = Link('d',0.1519,'a',0,'alpha',pi/2,'qlim',deg2rad([-360 360]));
             L2 = Link('d',0,'a',-0.24365,'alpha',0,'qlim',deg2rad([-180 0]));
-            L3 = Link('d',0,'a',-0.21325,'alpha',0,'qlim',deg2rad([-180 180]));
+            L3 = Link('d',0,'a',-0.21325,'alpha',0,'qlim',deg2rad([-135 135]));
             L4 = Link('d',0.11235,'a',0,'alpha',pi/2,'qlim',deg2rad([-360 360]));
             L5 = Link('d',0.08535,'a',0,'alpha',-pi/2,'qlim',deg2rad([-360 360]));
             L6 = Link('d',0.0819,'a',0,'alpha',0,'qlim',deg2rad([-360 360]));
