@@ -1,0 +1,36 @@
+Welcome to 99143152 Robotics assignment 1
+
+Model Name: UR3_1
+Model qlims: -6.283 -3.142 
+Model qlims: -2.356 -6.283 
+Model qlims: -6.283 -6.283 
+Model qlims: 6.283 0.000 
+Model qlims: 2.356 6.283 
+Model qlims: 6.283 6.283 
+Model base x y z: 0.4000 0.2000 0.0000 
+
+Model Name: UR3_2
+Model qlims: -6.283 -3.142 
+Model qlims: -2.356 -6.283 
+Model qlims: -6.283 -6.283 
+Model qlims: 6.283 0.000 
+Model qlims: 2.356 6.283 
+Model qlims: 6.283 6.283 
+Model base x y z: -0.1000 -0.0500 0.0000 
+
+Model Name: housingTop_1
+Model qlims: -3.142 3.142 
+Model base x y z: -0.0500 0.2000 0.0000 
+
+Model Name: housingBottom_1
+Model qlims: -3.142 3.142 
+Model base x y z: 0.3000 0.3000 0.0000 
+
+Model Name: circuitBoard_1
+Model qlims: -3.142 3.142 
+Model base x y z: 0.0000 -0.2000 0.0000 
+
+Model Name: Crate_1
+Model qlims: -3.142 3.142 
+Model base x y z: 0.2000 0.2000 0.0000 
+

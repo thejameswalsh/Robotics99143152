@@ -7,14 +7,7 @@ clear
 clc
 
 %% modelling UR3 Robots
-
-% hold on
-% m = PlaceObject('fence.ply',[1,1,0])
-% hold on
-% delete(m)
-% m = PlaceObject('fence.ply',[2,1,10])
-% n = PlaceObject('fenceRotate.ply',[2,1,10])
-% pause(0.1);
+log = logger('log.txt');
 hold on
 floorOffset = -0.8905/2; %messured from bounding box
 workSize = 1;
@@ -60,6 +53,13 @@ CircuitBoard = Objects('circuitBoard','1',workspace,transl(0,-0.2,z));
 Crate = Objects('Crate','1',workspace,transl(0.2,0.2,z));
 
 pause(0.01);
+% bodies = [UR3_1,UR3_1,Table,Fence1,Fence2,Fence2_2,Fence3,Fence4,Fence4_4,HousingTop,HousingBottom,CircuitBoard,Crate];
+bodies = [UR3_1,UR3_2]
+objects = [HousingTop,HousingBottom,CircuitBoard,Crate];
+%log bodies
+log.firstLogRobot(bodies);
+log.firstLogRobot(objects);
+
 
 %% Modelling bodies 
 
@@ -117,11 +117,10 @@ switch chunk
         delete(pointCloudPlot)
 end
 
-%% finish section
+%% log section
 
-% hold off
-
-% close all
+log.logging(bodies);
+log.logging(objects);
 
 %% place items down?
 
@@ -158,128 +157,41 @@ initQ = [0,0,0,0,0,0];
 % animate 1, pick up top Housing
 % going to housing top carrying nothing with arm one
 MoveWObjects(UR3_1,HousingTop.model.base, []);
+log.logging(bodies);
+log.logging(objects);
 % animate 2, pick up bottom Housing
 % going to housing bottom carrying nothing with arm two
 MoveWObjects(UR3_2,HousingBottom.model.base, []);
+log.logging(bodies);
+log.logging(objects);
 % animate 3, go to meeting location to put parts together
 % carrying top housing with arm one
 MoveWObjects(UR3_1,handoffLocation, [HousingTop]);
+log.logging(bodies);
+log.logging(objects);
 % animate 4, go to UR3_1 pose location to put parts together
 % carrying bottom housing with arm two
 MoveWObjects(UR3_2,UR3_1.model.fkine(UR3_1.model.getpos)* trotz(pi), [HousingBottom]);
+log.logging(bodies);
+log.logging(objects);
 % animate 5, go to circuit pose location to pickup
 % carrying nothing with arm two
 MoveWObjects(UR3_2,CircuitBoard.model.base, []);
+log.logging(bodies);
+log.logging(objects);
 % animate 6, go to UR3_1 pose location to put parts together
 % carrying bottom housing with arm two
 MoveWObjects(UR3_2,UR3_1.model.fkine(UR3_1.model.getpos)* trotz(pi), [CircuitBoard]);
+log.logging(bodies);
+log.logging(objects);
 % animate 6, go to crate pose to dump parts
 % carrying bottom housing top housing and circuit board
 MoveWObjects(UR3_1,Crate.model.base * transl(0,0,0), [HousingTop, HousingBottom, CircuitBoard]);
+log.logging(bodies);
+log.logging(objects);
+%template
 % MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
-% MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
-% MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
 
-% animate 1 
-% goalQ = UR3_1.model.ikcon(housing_top_pose * transl(0,0,zoffset),UR3_1.model.getpos);
-% jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_1.model.animate(q);
-%     pause(0.01);
-% end
-% pause(0.01);
-% 
-% goalQ = UR3_1.model.ikcon(housing_top_pose,UR3_1.model.getpos);
-% jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_1.model.animate(q);
-%     pause(0.01);
-% end
-% pause(0.01);
-
-% animate 2
-% goalQ = UR3_2.model.ikcon(circuit_board_pose * transl(0,0,zoffset),UR3_2.model.getpos);
-% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_2.model.animate(q);
-%     pause(0.001);
-%     trajStep;
-% end
-% 
-% goalQ = UR3_2.model.ikcon(circuit_board_pose,UR3_2.model.getpos);
-% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_2.model.animate(q);
-%     pause(0.001);
-%     trajStep;
-% end
-
-%% put together
-
-% % animate 1 
-% goalQ = UR3_1.model.ikcon(handoffLocation,UR3_1.model.getpos);
-% jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_1.model.animate(q);
-%     pause(0.01);
-% end
-% pause(0.01);
-% 
-% % animate 2
-% goalQ = UR3_2.model.ikcon(handoffLocation * trotx(pi),UR3_2.model.getpos);
-% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_2.model.animate(q);
-%     pause(0.001);
-%     trajStep;
-% end
-% 
-% %% get third part
-% 
-% % animate 2
-% goalQ = UR3_2.model.ikcon(housing_bottom_pose * transl(0,0,zoffset),UR3_2.model.getpos);
-% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_2.model.animate(q);
-%     pause(0.001);
-%     trajStep;
-% end
-% 
-% goalQ = UR3_2.model.ikcon(housing_bottom_pose,UR3_2.model.getpos);
-% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_2.model.animate(q);
-%     pause(0.001);
-%     trajStep;
-% end
-% 
-% %% place together
-% % animate 2
-% goalQ = UR3_2.model.ikcon(handoffLocation * trotx(pi),UR3_2.model.getpos);
-% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-% 
-% for trajStep = 1:size(jointTrajectory,1)
-%     q = jointTrajectory(trajStep,:);
-%     UR3_2.model.animate(q);
-%     pause(0.001);
-%     trajStep;
-% end
 
 %% have a play
 "done"
