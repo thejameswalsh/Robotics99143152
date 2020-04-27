@@ -8,9 +8,17 @@ clc
 
 %% modelling UR3 Robots
 
+% hold on
+% m = PlaceObject('fence.ply',[1,1,0])
+% hold on
+% delete(m)
+% m = PlaceObject('fence.ply',[2,1,10])
+% n = PlaceObject('fenceRotate.ply',[2,1,10])
+% pause(0.1);
 hold on
-workSize = 0.6;
-workspace = [-workSize workSize -workSize workSize -workSize workSize];
+floorOffset = -0.8905/2; %messured from bounding box
+workSize = 3;
+workspace = [-workSize workSize -workSize workSize (2*floorOffset) workSize];
 scale = 0;
 
 % enter base location information
@@ -29,11 +37,27 @@ switch init
         z = 0;
 end
 
-% UR3_1 = SerialLink(linkList,'name','UR3_1','base',transl(x,y,z));
+% import arms
 UR3_1 = UR3Model('UR3_1',workspace, transl(x,y,z), 1);
 UR3_2 = UR3Model('UR3_2',workspace, transl(-0.1,-0.05,z), 1);
 
-Table = Objects('table
+out = ( UR3_1.model.base(1:2,4) + UR3_2.model.base(1:2,4) ) .'/2;
+safeDistance = 1.5;
+fenceOffset = 1.35
+tableOffset = 0.5
+% import objects
+% fix translations
+Table = Objects('table','1',workspace,transl(out(1), out(2),floorOffset));
+Fence1 = Objects('fence','1',workspace,transl(out(1),out(2) + safeDistance,floorOffset));
+Fence2 = Objects('fence','2',workspace,transl(out(1) - tableOffset + safeDistance,out(2) + fenceOffset/2,floorOffset) * trotz(pi/2));
+Fence2_2 = Objects('fence','2_2',workspace,transl(out(1) - tableOffset + safeDistance,out(2) - fenceOffset/2,floorOffset) * trotz(pi/2));
+Fence3 = Objects('fence','3',workspace,transl(out(1),out(2) - safeDistance,floorOffset) * trotz(pi));
+Fence4 = Objects('fence','4',workspace,transl(out(1) + tableOffset - safeDistance,out(2) + fenceOffset/2,floorOffset) * trotz((3 *pi)/2));
+Fence4_4 = Objects('fence','4_4',workspace,transl(out(1) + tableOffset - safeDistance,out(2) - fenceOffset/2,floorOffset) * trotz((3 *pi)/2));
+HousingTop = Objects('housingTop','1',workspace,transl(-0.2,0.2,z));
+HousingBottom = Objects('housingBottom','1',workspace,transl(0.5,0.3,z));
+CircuitBoard = Objects('circuitBoard','1',workspace,transl(0,-0.2,z));
+Create = Objects('Crate','1',workspace,transl(0,0.4,z));
 
 pause(0.01);
 
@@ -101,6 +125,11 @@ end
 
 %% place items down?
 
+temp = UR3_1;
+UR3_1 = UR3_2;
+UR3_2 = UR3_1;
+delete(temp);
+
 zoffset = -0.1;
 
 housing_top_location = [0.2,0,0]
@@ -127,11 +156,8 @@ trplot(housing_bottom_pose,'length',0.1);
 % hold on
 trplot(circuit_board_pose,'length',0.1);
 
-% get pose
 % init pos
 initQ = [0,0,0,0,0,0]; 
-% UR3_1.model.plot3d(initQ)
-% UR3_2.model.plot3d(initQ)
 
 % animate 1 
 goalQ = UR3_1.model.ikcon(housing_top_pose * transl(0,0,zoffset),UR3_1.model.getpos);
