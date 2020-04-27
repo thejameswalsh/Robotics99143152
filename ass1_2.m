@@ -17,7 +17,7 @@ clc
 % pause(0.1);
 hold on
 floorOffset = -0.8905/2; %messured from bounding box
-workSize = 3;
+workSize = 1;
 workspace = [-workSize workSize -workSize workSize (2*floorOffset) workSize];
 scale = 0;
 
@@ -47,17 +47,17 @@ fenceOffset = 1.35
 tableOffset = 0.5
 % import objects
 % fix translations
-Table = Objects('table','1',workspace,transl(out(1), out(2),floorOffset));
-Fence1 = Objects('fence','1',workspace,transl(out(1),out(2) + safeDistance,floorOffset));
-Fence2 = Objects('fence','2',workspace,transl(out(1) - tableOffset + safeDistance,out(2) + fenceOffset/2,floorOffset) * trotz(pi/2));
-Fence2_2 = Objects('fence','2_2',workspace,transl(out(1) - tableOffset + safeDistance,out(2) - fenceOffset/2,floorOffset) * trotz(pi/2));
-Fence3 = Objects('fence','3',workspace,transl(out(1),out(2) - safeDistance,floorOffset) * trotz(pi));
-Fence4 = Objects('fence','4',workspace,transl(out(1) + tableOffset - safeDistance,out(2) + fenceOffset/2,floorOffset) * trotz((3 *pi)/2));
-Fence4_4 = Objects('fence','4_4',workspace,transl(out(1) + tableOffset - safeDistance,out(2) - fenceOffset/2,floorOffset) * trotz((3 *pi)/2));
-HousingTop = Objects('housingTop','1',workspace,transl(-0.2,0.2,z));
-HousingBottom = Objects('housingBottom','1',workspace,transl(0.5,0.3,z));
+% Table = Objects('table','1',workspace,transl(out(1), out(2),floorOffset));
+% Fence1 = Objects('fence','1',workspace,transl(out(1),out(2) + safeDistance,floorOffset));
+% Fence2 = Objects('fence','2',workspace,transl(out(1) - tableOffset + safeDistance,out(2) + fenceOffset/2,floorOffset) * trotz(pi/2));
+% Fence2_2 = Objects('fence','2_2',workspace,transl(out(1) - tableOffset + safeDistance,out(2) - fenceOffset/2,floorOffset) * trotz(pi/2));
+% Fence3 = Objects('fence','3',workspace,transl(out(1),out(2) - safeDistance,floorOffset) * trotz(pi));
+% Fence4 = Objects('fence','4',workspace,transl(out(1) + tableOffset - safeDistance,out(2) + fenceOffset/2,floorOffset) * trotz((3 *pi)/2));
+% Fence4_4 = Objects('fence','4_4',workspace,transl(out(1) + tableOffset - safeDistance,out(2) - fenceOffset/2,floorOffset) * trotz((3 *pi)/2));
+HousingTop = Objects('housingTop','1',workspace,transl(-0.05,0.2,z));
+HousingBottom = Objects('housingBottom','1',workspace,transl(0.3,0.3,z));
 CircuitBoard = Objects('circuitBoard','1',workspace,transl(0,-0.2,z));
-Create = Objects('Crate','1',workspace,transl(0,0.4,z));
+Crate = Objects('Crate','1',workspace,transl(0.2,0.2,z));
 
 pause(0.01);
 
@@ -125,28 +125,24 @@ end
 
 %% place items down?
 
-temp = UR3_1;
-UR3_1 = UR3_2;
-UR3_2 = UR3_1;
-delete(temp);
+% temp = UR3_1;
+% UR3_1 = UR3_2;
+% UR3_2 = temp;
+% delete(temp);
 
 zoffset = -0.1;
 
-housing_top_location = [0.2,0,0]
-housing_bottom_location = [0.3,0,0]
-circuit_board_location = [-0.1,0.2,0]
-
 handoffLocation = ((UR3_1.model.base*UR3_2.model.base)/2);
 handoffLocation = handoffLocation(1:3,4);
-if (max(handoffLocation)/2) < 0.25
-    handoffLocation = transl(handoffLocation) * transl(0,0,0.25);
+if (max(handoffLocation)/2) < 0.3
+    handoffLocation = transl(handoffLocation) * transl(0,0,0.3);
 else
     handoffLocation = transl(handoffLocation) * transl(0,0,max(handoffLocation)/2);
 end
 
-housing_top_pose = transl(housing_top_location) * trotx(pi)
-housing_bottom_pose = transl(housing_bottom_location) * trotx(pi)
-circuit_board_pose = transl(circuit_board_location) * trotx(pi)
+housing_top_pose = HousingTop.model.base * trotx(pi)
+housing_bottom_pose = HousingBottom.model.base * trotx(pi)
+circuit_board_pose = CircuitBoard.model.base * trotx(pi)
 
 hold on
 
@@ -159,106 +155,131 @@ trplot(circuit_board_pose,'length',0.1);
 % init pos
 initQ = [0,0,0,0,0,0]; 
 
+% animate 1, pick up top Housing
+% going to housing top carrying nothing with arm one
+MoveWObjects(UR3_1,HousingTop.model.base, [])
+% animate 2, pick up bottom Housing
+% going to housing bottom carrying nothing with arm two
+MoveWObjects(UR3_2,HousingBottom.model.base, [])
+% animate 3, go to meeting location to put parts together
+% carrying top housing with arm one
+MoveWObjects(UR3_1,handoffLocation, [HousingTop])
+% animate 4, go to UR3_1 pose location to put parts together
+% carrying bottom housing with arm two
+MoveWObjects(UR3_2,UR3_1.model.fkine(UR3_1.model.getpos)* trotz(pi), [HousingBottom])
+% animate 5, go to circuit pose location to pickup
+% carrying nothing with arm two
+MoveWObjects(UR3_2,CircuitBoard.model.base, [])
+% animate 6, go to UR3_1 pose location to put parts together
+% carrying bottom housing with arm two
+MoveWObjects(UR3_2,UR3_1.model.fkine(UR3_1.model.getpos)* trotz(pi), [CircuitBoard])
+% animate 6, go to crate pose to dump parts
+% carrying bottom housing top housing and circuit board
+MoveWObjects(UR3_1,Crate.model.base * transl(0,0,0), [HousingTop, HousingBottom, CircuitBoard])
+% MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
+% MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
+% MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
+
 % animate 1 
-goalQ = UR3_1.model.ikcon(housing_top_pose * transl(0,0,zoffset),UR3_1.model.getpos);
-jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_1.model.animate(q);
-    pause(0.01);
-end
-pause(0.01);
-
-goalQ = UR3_1.model.ikcon(housing_top_pose,UR3_1.model.getpos);
-jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_1.model.animate(q);
-    pause(0.01);
-end
-pause(0.01);
+% goalQ = UR3_1.model.ikcon(housing_top_pose * transl(0,0,zoffset),UR3_1.model.getpos);
+% jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_1.model.animate(q);
+%     pause(0.01);
+% end
+% pause(0.01);
+% 
+% goalQ = UR3_1.model.ikcon(housing_top_pose,UR3_1.model.getpos);
+% jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_1.model.animate(q);
+%     pause(0.01);
+% end
+% pause(0.01);
 
 % animate 2
-goalQ = UR3_2.model.ikcon(circuit_board_pose * transl(0,0,zoffset),UR3_2.model.getpos);
-jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_2.model.animate(q);
-    pause(0.001);
-    trajStep;
-end
-
-goalQ = UR3_2.model.ikcon(circuit_board_pose,UR3_2.model.getpos);
-jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_2.model.animate(q);
-    pause(0.001);
-    trajStep;
-end
+% goalQ = UR3_2.model.ikcon(circuit_board_pose * transl(0,0,zoffset),UR3_2.model.getpos);
+% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_2.model.animate(q);
+%     pause(0.001);
+%     trajStep;
+% end
+% 
+% goalQ = UR3_2.model.ikcon(circuit_board_pose,UR3_2.model.getpos);
+% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_2.model.animate(q);
+%     pause(0.001);
+%     trajStep;
+% end
 
 %% put together
 
-% animate 1 
-goalQ = UR3_1.model.ikcon(handoffLocation,UR3_1.model.getpos);
-jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_1.model.animate(q);
-    pause(0.01);
-end
-pause(0.01);
-
-% animate 2
-goalQ = UR3_2.model.ikcon(handoffLocation * trotx(pi),UR3_2.model.getpos);
-jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_2.model.animate(q);
-    pause(0.001);
-    trajStep;
-end
-
-%% get third part
-
-% animate 2
-goalQ = UR3_2.model.ikcon(housing_bottom_pose * transl(0,0,zoffset),UR3_2.model.getpos);
-jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_2.model.animate(q);
-    pause(0.001);
-    trajStep;
-end
-
-goalQ = UR3_2.model.ikcon(housing_bottom_pose,UR3_2.model.getpos);
-jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_2.model.animate(q);
-    pause(0.001);
-    trajStep;
-end
-
-%% place together
-% animate 2
-goalQ = UR3_2.model.ikcon(handoffLocation * trotx(pi),UR3_2.model.getpos);
-jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
-
-for trajStep = 1:size(jointTrajectory,1)
-    q = jointTrajectory(trajStep,:);
-    UR3_2.model.animate(q);
-    pause(0.001);
-    trajStep;
-end
+% % animate 1 
+% goalQ = UR3_1.model.ikcon(handoffLocation,UR3_1.model.getpos);
+% jointTrajectory = jtraj(UR3_1.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_1.model.animate(q);
+%     pause(0.01);
+% end
+% pause(0.01);
+% 
+% % animate 2
+% goalQ = UR3_2.model.ikcon(handoffLocation * trotx(pi),UR3_2.model.getpos);
+% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_2.model.animate(q);
+%     pause(0.001);
+%     trajStep;
+% end
+% 
+% %% get third part
+% 
+% % animate 2
+% goalQ = UR3_2.model.ikcon(housing_bottom_pose * transl(0,0,zoffset),UR3_2.model.getpos);
+% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_2.model.animate(q);
+%     pause(0.001);
+%     trajStep;
+% end
+% 
+% goalQ = UR3_2.model.ikcon(housing_bottom_pose,UR3_2.model.getpos);
+% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_2.model.animate(q);
+%     pause(0.001);
+%     trajStep;
+% end
+% 
+% %% place together
+% % animate 2
+% goalQ = UR3_2.model.ikcon(handoffLocation * trotx(pi),UR3_2.model.getpos);
+% jointTrajectory = jtraj(UR3_2.model.getpos(), goalQ,30);
+% 
+% for trajStep = 1:size(jointTrajectory,1)
+%     q = jointTrajectory(trajStep,:);
+%     UR3_2.model.animate(q);
+%     pause(0.001);
+%     trajStep;
+% end
 
 %% have a play
 "done"
