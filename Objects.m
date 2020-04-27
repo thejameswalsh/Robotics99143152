@@ -9,7 +9,6 @@ classdef Objects < handle % class to handle setting up of the static body
     methods
         function self = Objects(ModelName, ModelNum, workspace, location)
             self.plotAndColour(workspace, ModelName, ModelNum, location);
-            camlight;
         end
                
         function plotAndColour(self, workspace, ModelName, ModelNum, location)
