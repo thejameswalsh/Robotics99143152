@@ -157,25 +157,25 @@ initQ = [0,0,0,0,0,0];
 
 % animate 1, pick up top Housing
 % going to housing top carrying nothing with arm one
-MoveWObjects(UR3_1,HousingTop.model.base, [])
+MoveWObjects(UR3_1,HousingTop.model.base, []);
 % animate 2, pick up bottom Housing
 % going to housing bottom carrying nothing with arm two
-MoveWObjects(UR3_2,HousingBottom.model.base, [])
+MoveWObjects(UR3_2,HousingBottom.model.base, []);
 % animate 3, go to meeting location to put parts together
 % carrying top housing with arm one
-MoveWObjects(UR3_1,handoffLocation, [HousingTop])
+MoveWObjects(UR3_1,handoffLocation, [HousingTop]);
 % animate 4, go to UR3_1 pose location to put parts together
 % carrying bottom housing with arm two
-MoveWObjects(UR3_2,UR3_1.model.fkine(UR3_1.model.getpos)* trotz(pi), [HousingBottom])
+MoveWObjects(UR3_2,UR3_1.model.fkine(UR3_1.model.getpos)* trotz(pi), [HousingBottom]);
 % animate 5, go to circuit pose location to pickup
 % carrying nothing with arm two
-MoveWObjects(UR3_2,CircuitBoard.model.base, [])
+MoveWObjects(UR3_2,CircuitBoard.model.base, []);
 % animate 6, go to UR3_1 pose location to put parts together
 % carrying bottom housing with arm two
-MoveWObjects(UR3_2,UR3_1.model.fkine(UR3_1.model.getpos)* trotz(pi), [CircuitBoard])
+MoveWObjects(UR3_2,UR3_1.model.fkine(UR3_1.model.getpos)* trotz(pi), [CircuitBoard]);
 % animate 6, go to crate pose to dump parts
 % carrying bottom housing top housing and circuit board
-MoveWObjects(UR3_1,Crate.model.base * transl(0,0,0), [HousingTop, HousingBottom, CircuitBoard])
+MoveWObjects(UR3_1,Crate.model.base * transl(0,0,0), [HousingTop, HousingBottom, CircuitBoard]);
 % MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
 % MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
 % MoveWObjects(UR3_1,transl(0,0,0), [HousingTop, HousingBottom])
