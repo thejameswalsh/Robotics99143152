@@ -7,8 +7,13 @@ function [RobotEndPose,Objects] = MoveWObjects(Robot_Arm,GoalPose,Objects)
 zoffset = -0.1;
 % animate 1
 initQ = Robot_Arm.model.getpos .* [1,0,0,0,0,0];
-initQ(2) = 90;
-goalQ = Robot_Arm.model.ikcon(GoalPose * trotx(pi) * transl(0,0,zoffset),initQ);
+initQ(2) = pi/2;
+if size(GoalPose,2) == 6
+    goalQ = GoalPose;
+else
+%     goalQ = Robot_Arm.model.ikcon(GoalPose * trotx(pi) * transl(0,0,zoffset),initQ);
+    goalQ = Robot_Arm.model.ikcon(GoalPose * trotx(pi) * transl(0,0,zoffset),Robot_Arm.model.getpos);
+end
 jointTrajectory = jtraj(Robot_Arm.model.getpos(), goalQ,30);
 
 for trajStep = 1:size(jointTrajectory,1)
@@ -25,9 +30,13 @@ for trajStep = 1:size(jointTrajectory,1)
 end
 pause(0.01);
 
-initQ = Robot_Arm.model.getpos .* [1,0,0,0,0,0];
-initQ(2) = 90;
-goalQ = Robot_Arm.model.ikcon(GoalPose * trotx(pi),initQ);
+% initQ = Robot_Arm.model.getpos .* [1,0,0,0,0,0];
+% initQ(2) = 90;
+if size(GoalPose,2) == 6
+    return
+else
+    goalQ = Robot_Arm.model.ikcon(GoalPose * trotx(pi),Robot_Arm.model.getpos);
+end
 jointTrajectory = jtraj(Robot_Arm.model.getpos(), goalQ,30);
 
 for trajStep = 1:size(jointTrajectory,1)
