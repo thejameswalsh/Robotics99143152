@@ -20,12 +20,21 @@ classdef logger
         function firstLogRobot(obj, Models)
             for i = 1:size(Models,2)
                 file = fopen('log.txt','a');
-                pos = Models(i).model.fkine(Models(i).model.getpos);
-                pos = pos(1:3,4);
-                q = Models(i).model.getpos;
                 fprintf(file,['Model Name: ',Models(i).model.name,'\n']);
                 fprintf(file,'Model qlims: %.3f %.3f \n',Models(i).model.qlim);
                 fprintf(file,'Model base x y z: %.4f %.4f %.4f \n', Models(i).model.base(1:3,4));
+                fprintf(file,'\n');
+                
+                fclose(file);
+            end
+        end
+        
+        function MaxLog(obj, Models)
+            for i = 1:size(Models,2)
+                file = fopen('log.txt','a');
+                fprintf(file,['Model Name: ',Models(i).model.name,'\n']);
+                fprintf(file,'Max Reach : %.4f\n',Models(i).Max_Reach);
+                fprintf(file,'Max Volume: %.4f\n', Models(i).Max_Vol);
                 fprintf(file,'\n');
                 
                 fclose(file);

@@ -7,7 +7,7 @@ Model qlims: -6.283 -6.283
 Model qlims: 6.283 0.000 
 Model qlims: 2.356 6.283 
 Model qlims: 6.283 6.283 
-Model base x y z: 0.4000 0.2000 0.0000 
+Model base x y z: -0.2300 0.2300 0.0000 
 
 Model Name: UR3_2
 Model qlims: -6.283 -3.142 
@@ -16,181 +16,161 @@ Model qlims: -6.283 -6.283
 Model qlims: 6.283 0.000 
 Model qlims: 2.356 6.283 
 Model qlims: 6.283 6.283 
-Model base x y z: -0.1000 -0.0500 0.0000 
+Model base x y z: 0.2300 0.2300 0.0000 
 
 Model Name: housingTop_1
 Model qlims: -3.142 3.142 
-Model base x y z: -0.0500 0.2000 0.0000 
+Model base x y z: -0.4200 0.4600 0.0000 
 
 Model Name: housingBottom_1
 Model qlims: -3.142 3.142 
-Model base x y z: 0.3000 0.3000 0.0000 
+Model base x y z: 0.4200 0.4600 0.0000 
 
 Model Name: circuitBoard_1
 Model qlims: -3.142 3.142 
-Model base x y z: 0.0000 -0.2000 0.0000 
+Model base x y z: 0.0000 0.4000 0.0000 
 
 Model Name: Crate_1
 Model qlims: -3.142 3.142 
-Model base x y z: 0.2000 0.2000 0.0000 
+Model base x y z: -0.4000 -0.1000 0.0000 
 
 Model Name: UR3_1
-Model x y z: -0.0569 0.0057 0.0666 
-Model joints: 0.000 0.000 0.000 0.000 0.000 0.000 
+Model x y z: -0.4199 0.4600 0.0001 
+Model joints: -1.267 -0.629 2.228 3.113 -1.571 0.304 
 
 Model Name: UR3_2
-Model x y z: -0.5569 -0.2442 0.0666 
-Model joints: 0.000 0.000 0.000 0.000 0.000 0.000 
-
-Model Name: housingTop_1
-Model x y z: -0.0500 0.2000 0.0000 
-Model joints: 0.000 
-Model Name: housingBottom_1
-Model x y z: 0.3000 0.3000 0.0000 
-Model joints: 0.000 
-Model Name: circuitBoard_1
-Model x y z: 0.0000 -0.2000 0.0000 
-Model joints: 0.000 
-Model Name: Crate_1
-Model x y z: 0.2000 0.2000 0.0000 
-Model joints: 0.000 
-Model Name: UR3_1
-Model x y z: -0.0500 0.2000 0.0000 
-Model joints: -0.252 -0.424 1.349 -2.496 -1.571 1.318 
-
-Model Name: UR3_2
-Model x y z: -0.5569 -0.2442 0.0666 
+Model x y z: -0.2269 0.0357 0.0666 
 Model joints: 0.000 0.000 0.000 0.000 0.000 0.000 
 
 Model Name: housingTop_1
-Model x y z: -0.0500 0.2000 0.0000 
+Model x y z: -0.4200 0.4600 0.0000 
 Model joints: 0.000 
 Model Name: housingBottom_1
-Model x y z: 0.3000 0.3000 0.0000 
+Model x y z: 0.4200 0.4600 0.0000 
 Model joints: 0.000 
 Model Name: circuitBoard_1
-Model x y z: 0.0000 -0.2000 0.0000 
+Model x y z: 0.0000 0.4000 0.0000 
 Model joints: 0.000 
 Model Name: Crate_1
-Model x y z: 0.2000 0.2000 0.0000 
+Model x y z: -0.4000 -0.1000 0.0000 
 Model joints: 0.000 
 Model Name: UR3_1
-Model x y z: -0.0500 0.2000 0.0000 
-Model joints: -0.252 -0.424 1.349 -2.496 -1.571 1.318 
+Model x y z: -0.4199 0.4600 0.0001 
+Model joints: -1.267 -0.629 2.228 3.113 -1.571 0.304 
 
 Model Name: UR3_2
-Model x y z: 0.3000 0.2999 0.0001 
-Model joints: -2.636 -0.097 0.552 4.258 -1.571 -1.065 
+Model x y z: 0.4200 0.4600 -0.0000 
+Model joints: -2.647 -0.628 2.228 -3.170 -1.571 -1.077 
 
 Model Name: housingTop_1
-Model x y z: -0.0500 0.2000 0.0000 
+Model x y z: -0.4200 0.4600 0.0000 
 Model joints: 0.000 
 Model Name: housingBottom_1
-Model x y z: 0.3000 0.3000 0.0000 
+Model x y z: 0.4200 0.4600 0.0000 
 Model joints: 0.000 
 Model Name: circuitBoard_1
-Model x y z: 0.0000 -0.2000 0.0000 
+Model x y z: 0.0000 0.4000 0.0000 
 Model joints: 0.000 
 Model Name: Crate_1
-Model x y z: 0.2000 0.2000 0.0000 
+Model x y z: -0.4000 -0.1000 0.0000 
 Model joints: 0.000 
 Model Name: UR3_1
-Model x y z: 0.1500 0.0750 0.3000 
-Model joints: 0.050 -1.746 1.792 -1.617 -1.571 1.621 
+Model x y z: -0.0000 0.2302 0.2999 
+Model joints: 0.137 -1.918 -2.118 0.892 -3.279 -0.003 
 
 Model Name: UR3_2
-Model x y z: 0.3000 0.2999 0.0001 
-Model joints: -2.636 -0.097 0.552 4.258 -1.571 -1.065 
+Model x y z: 0.4200 0.4600 -0.0000 
+Model joints: -2.647 -0.628 2.228 -3.170 -1.571 -1.077 
 
 Model Name: housingTop_1
-Model x y z: 0.1500 0.0750 0.3000 
+Model x y z: -0.0000 0.2302 0.2999 
 Model joints: 0.000 
 Model Name: housingBottom_1
-Model x y z: 0.3000 0.3000 0.0000 
+Model x y z: 0.4200 0.4600 0.0000 
 Model joints: 0.000 
 Model Name: circuitBoard_1
-Model x y z: 0.0000 -0.2000 0.0000 
+Model x y z: 0.0000 0.4000 0.0000 
 Model joints: 0.000 
 Model Name: Crate_1
-Model x y z: 0.2000 0.2000 0.0000 
+Model x y z: -0.4000 -0.1000 0.0000 
 Model joints: 0.000 
 Model Name: UR3_1
-Model x y z: 0.1500 0.0750 0.3000 
-Model joints: 0.050 -1.746 1.792 -1.617 -1.571 1.621 
+Model x y z: -0.0000 0.2302 0.2999 
+Model joints: 0.137 -1.918 -2.118 0.892 -3.279 -0.003 
 
 Model Name: UR3_2
-Model x y z: 0.1500 0.0750 0.3000 
-Model joints: -5.406 -1.761 -2.328 5.659 -1.571 0.694 
+Model x y z: -0.0007 0.2509 0.3002 
+Model joints: 3.183 -1.587 -2.303 -0.179 -3.166 -0.927 
 
 Model Name: housingTop_1
-Model x y z: 0.1500 0.0750 0.3000 
+Model x y z: -0.0000 0.2302 0.2999 
 Model joints: 0.000 
 Model Name: housingBottom_1
-Model x y z: 0.1500 0.0750 0.3000 
+Model x y z: -0.0007 0.2509 0.3002 
 Model joints: 0.000 
 Model Name: circuitBoard_1
-Model x y z: 0.0000 -0.2000 0.0000 
+Model x y z: 0.0000 0.4000 0.0000 
 Model joints: 0.000 
 Model Name: Crate_1
-Model x y z: 0.2000 0.2000 0.0000 
+Model x y z: -0.4000 -0.1000 0.0000 
 Model joints: 0.000 
 Model Name: UR3_1
-Model x y z: 0.1500 0.0750 0.3000 
-Model joints: 0.050 -1.746 1.792 -1.617 -1.571 1.621 
+Model x y z: -0.0000 0.2302 0.2999 
+Model joints: 0.137 -1.918 -2.118 0.892 -3.279 -0.003 
 
 Model Name: UR3_2
-Model x y z: 0.1408 -0.1637 -0.0013 
-Model joints: -6.283 -2.478 -2.356 6.283 1.554 -1.570 
+Model x y z: 0.0000 0.4001 0.0001 
+Model joints: 5.243 -0.624 2.289 -3.236 -1.571 0.530 
 
 Model Name: housingTop_1
-Model x y z: 0.1500 0.0750 0.3000 
+Model x y z: -0.0000 0.2302 0.2999 
 Model joints: 0.000 
 Model Name: housingBottom_1
-Model x y z: 0.1500 0.0750 0.3000 
+Model x y z: -0.0007 0.2509 0.3002 
 Model joints: 0.000 
 Model Name: circuitBoard_1
-Model x y z: 0.0000 -0.2000 0.0000 
+Model x y z: 0.0000 0.4000 0.0000 
 Model joints: 0.000 
 Model Name: Crate_1
-Model x y z: 0.2000 0.2000 0.0000 
+Model x y z: -0.4000 -0.1000 0.0000 
 Model joints: 0.000 
 Model Name: UR3_1
-Model x y z: 0.1500 0.0750 0.3000 
-Model joints: 0.050 -1.746 1.792 -1.617 -1.571 1.621 
+Model x y z: -0.0000 0.2302 0.2999 
+Model joints: 0.137 -1.918 -2.118 0.892 -3.279 -0.003 
 
 Model Name: UR3_2
-Model x y z: 0.2032 0.1015 0.4495 
-Model joints: -3.014 0.000 -1.601 6.283 1.581 -4.841 
+Model x y z: -0.0000 0.2302 0.2999 
+Model joints: 5.462 -0.089 -1.603 1.693 -0.821 -3.142 
 
 Model Name: housingTop_1
-Model x y z: 0.1500 0.0750 0.3000 
+Model x y z: -0.0000 0.2302 0.2999 
 Model joints: 0.000 
 Model Name: housingBottom_1
-Model x y z: 0.1500 0.0750 0.3000 
+Model x y z: -0.0007 0.2509 0.3002 
 Model joints: 0.000 
 Model Name: circuitBoard_1
-Model x y z: 0.2032 0.1015 0.4495 
+Model x y z: -0.0000 0.2302 0.2999 
 Model joints: 0.000 
 Model Name: Crate_1
-Model x y z: 0.2000 0.2000 0.0000 
+Model x y z: -0.4000 -0.1000 0.0000 
 Model joints: 0.000 
 Model Name: UR3_1
-Model x y z: 0.1465 0.1999 -0.0352 
-Model joints: -0.455 -0.386 2.356 -3.536 -1.582 1.116 
+Model x y z: -0.3999 -0.0999 0.0000 
+Model joints: 0.788 -0.059 0.466 1.164 1.571 -0.783 
 
 Model Name: UR3_2
-Model x y z: 0.2032 0.1015 0.4495 
-Model joints: -3.014 0.000 -1.601 6.283 1.581 -4.841 
+Model x y z: -0.0000 0.2302 0.2999 
+Model joints: 5.462 -0.089 -1.603 1.693 -0.821 -3.142 
 
 Model Name: housingTop_1
-Model x y z: 0.1465 0.1999 -0.0352 
+Model x y z: -0.3999 -0.0999 0.0000 
 Model joints: 0.000 
 Model Name: housingBottom_1
-Model x y z: 0.1465 0.1999 -0.0352 
+Model x y z: -0.3999 -0.0999 0.0000 
 Model joints: 0.000 
 Model Name: circuitBoard_1
-Model x y z: 0.1465 0.1999 -0.0352 
+Model x y z: -0.3999 -0.0999 0.0000 
 Model joints: 0.000 
 Model Name: Crate_1
-Model x y z: 0.2000 0.2000 0.0000 
+Model x y z: -0.4000 -0.1000 0.0000 
 Model joints: 0.000 

@@ -8,6 +8,8 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
         name;
         pointCloud;
         qValueMatrix;
+        Max_Reach;
+        Max_Vol;
     end
     
     methods
@@ -100,6 +102,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
                 display('no point cloud generated for this model yet');
             else
                 [k, Vol] = convhull(self.pointCloud);
+                self.Max_Vol = Vol;
             end             
         end
         
@@ -116,6 +119,7 @@ classdef UR3Model < handle % setup and move the UR3 robot, as well as log its tr
                 end
 
                 [Reach,index] = max(output);
+                self.Max_Reach = Reach;
             end             
         end           
         
